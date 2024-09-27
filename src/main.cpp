@@ -1,61 +1,37 @@
-#include <Arduino.h>
-#include "StateMachine.h"
-#include "Logger.h"
-#include "Display.h"
-#include "RotaryEncoder.h"
-#include "LoadCell.h"
-#include "GrinderMotor.h"
-
-// Rotary Encoder
-#define PIN_ENCODER_CLK 17
-#define PIN_ENCODER_DT 16
-#define PIN_ENCODER_SW 4
-
-// Loadcell
-#define PIN_LOADCELL_DA 9
-#define PIN_LOADCELL_CL 10
-
-// Grinder Motor
-#define RELAY 13
-
-StateMachine &stateMachine = StateMachine::getInstance();
-RotaryEncoder &rotaryEncoder = RotaryEncoder::getInstance();
-LoadCell &loadCell = LoadCell::getInstance();
-GrinderMotor &grinderMotor = GrinderMotor::getInstance();
+#include "Arduino.h"
+#include "config.h"
+#include "core1/operational_task.h"
+#include "core2/ui_task.h"
+#include "communication/inter_core_comm.h"
 
 void setup()
 {
-  Serial.begin(115200);
-  while (!Serial)
-  {
-    delay(100);
-  }
+    Serial.begin(115200);
 
-  Logger::getInstance().setLogLevel(Logger::LOG_LEVEL_DEBUG);
+    initInterCoreCommunication();
 
-  stateMachine.setState(StateMachine::STATE_MAIN);
+    // Create tasks for Core 1 and Core 2
+    xTaskCreatePinnedToCore(
+        operationalTask,   // Task function
+        "OperationalTask", // Name of task
+        8192,              // Stack size
+        NULL,              // Parameter
+        2,                 // Priority
+        NULL,              // Task handle
+        0                  // Core ID
+    );
 
-  // Initialize display
-  Display &display = Display::getInstance();
-  display.begin();
-
-  // Initialize rotary encoder
-  rotaryEncoder.begin(PIN_ENCODER_CLK, PIN_ENCODER_DT, PIN_ENCODER_SW);
-
-  // Initialize load cell
-  // loadCell.begin(PIN_LOADCELL_DA, PIN_LOADCELL_CL);
-
-  // Initialize grinder motor
-  grinderMotor.begin(RELAY);
-
-  // Create the display task on core 1
-  xTaskCreatePinnedToCore(displayTask, "DisplayTask", 4096, NULL, 1, NULL, 1);
+    xTaskCreatePinnedToCore(
+        uiTask,   // Task function
+        "UITask", // Name of task
+        8192,     // Stack size
+        NULL,     // Parameter
+        1,        // Priority
+        NULL,     // Task handle
+        1         // Core ID
+    );
 }
 
 void loop()
 {
-  stateMachine.run();
-
-  // Slight delay for stability
-  delay(100);
 }
