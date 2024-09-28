@@ -6,7 +6,7 @@
 
 void uiTask()
 {
-    ui_state ui_state = MAIN;
+    ui_state ui_state = UI_MAIN;
 
     CommandMessage cmd_msg;
     StatusMessage status_msg;
@@ -19,7 +19,7 @@ void uiTask()
     {
         switch (ui_state)
         {
-        case MAIN:
+        case UI_MAIN:
             // Handle rotary encoder input
             int32_t encoder_pos = getEncoderPosition();
             if (encoder_pos != 0)
@@ -45,7 +45,7 @@ void uiTask()
                 sendCommandToCore1(cmd_msg);
 
                 // Update UI state
-                ui_state = GRINDING_IN_PROGRESS;
+                ui_state = UI_GRINDING_IN_PROGRESS;
                 displayGrindingInProgress();
 
                 // Turn off encoder so weight cannot be changed during grinding process
@@ -54,18 +54,18 @@ void uiTask()
 
             break;
 
-        case GRINDING_IN_PROGRESS:
+        case UI_GRINDING_IN_PROGRESS:
             // Check for status updates from Core 1
             if (receiveStatusFromCore1(&status_msg))
             {
                 if (status_msg.type == GRINDING_COMPLETE)
                 {
-                    ui_state = GRINDING_COMPLETE;
+                    ui_state = UI_GRINDING_COMPLETE;
                     displayGrindingComplete(status_msg.finalWeight);
                 }
                 else if (status_msg.type == ERROR_OCCURRED)
                 {
-                    ui_state = ERROR_STATE;
+                    ui_state = UI_ERROR_STATE;
                     displayError(status_msg.errorMessage);
                 }
             }
@@ -85,35 +85,35 @@ void uiTask()
 
                 if (status_msg.type == GRINDING_COMPLETE)
                 {
-                    ui_state = GRINDING_COMPLETE;
+                    ui_state = UI_GRINDING_COMPLETE;
                     displayGrindingComplete(status_msg.finalWeight);
                 }
             }
 
             break;
 
-        case GRINDING_COMPLETE:
+        case UI_GRINDING_COMPLETE:
             // Wait for user acknowledgment or a delay
             if (isButtonPressed())
             {
                 enableEncoder();
-                ui_state = MAIN;
+                ui_state = UI_MAIN;
                 displayDesiredWeight(desired_weight);
             }
             break;
 
-        case ERROR_STATE:
+        case UI_ERROR_STATE:
             // Wait for user acknowledgment
             if (isButtonPressed())
             {
                 enableEncoder();
-                ui_state = MAIN;
+                ui_state = UI_MAIN;
                 displayDesiredWeight(desired_weight);
             }
             break;
 
         default:
-            ui_state = MAIN;
+            ui_state = UI_MAIN;
             break;
         }
 

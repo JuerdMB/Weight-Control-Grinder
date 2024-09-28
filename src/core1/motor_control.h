@@ -1,4 +1,5 @@
 #pragma once
 
-void initMotor();
+void initMotorControl();
 void startMotor();
+void stopMotor();

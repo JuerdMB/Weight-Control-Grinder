@@ -1,5 +1,3 @@
 #pragma once
 
-void operationalTask(void *pvParameters){
-
-}
+void operationalTask(void *pvParameters);

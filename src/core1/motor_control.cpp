@@ -2,7 +2,7 @@
 #include "config.h"
 #include "Arduino.h"
 
-void initMotor(){
+void initMotorControl(){
     // set motor pin
     pinMode(MOTOR_PIN, OUTPUT);
     stopMotor();
