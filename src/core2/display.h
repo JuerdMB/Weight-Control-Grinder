@@ -5,6 +5,6 @@
 
 void initDisplay();
 void displayDesiredWeight(float weight);
-void displayGrindingInProgress();
+void displayGrindingInProgress(float currentWeight);
 void displayGrindingComplete(float finalWeight);
 void displayError(String errorMessage);

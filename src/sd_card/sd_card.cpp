@@ -69,3 +69,39 @@ bool saveOverGrindOffset(float ogo) {
         return false;
     }
 }
+
+bool saveCalibrationData(long zeroOffset, float scaleFactor) {
+    StaticJsonDocument<200> doc;
+    doc["zeroOffset"] = zeroOffset;
+    doc["scaleFactor"] = scaleFactor;
+
+    File configFile = SD.open("/calibration.json", FILE_WRITE);
+    if (configFile) {
+        serializeJson(doc, configFile);
+        configFile.close();
+        return true;
+    } else {
+        Serial.println("Failed to open calibration file for writing");
+        return false;
+    }
+}
+
+bool loadCalibrationData(long &zeroOffset, float &scaleFactor) {
+    File configFile = SD.open("/calibration.json", FILE_READ);
+    if (configFile) {
+        StaticJsonDocument<200> doc;
+        DeserializationError error = deserializeJson(doc, configFile);
+        configFile.close();
+        if (!error) {
+            zeroOffset = doc["zeroOffset"] | 0;
+            scaleFactor = doc["scaleFactor"] | 1.0f;
+            return true;
+        } else {
+            Serial.println("Failed to parse calibration file");
+            return false;
+        }
+    } else {
+        Serial.println("Calibration file not found");
+        return false;
+    }
+}

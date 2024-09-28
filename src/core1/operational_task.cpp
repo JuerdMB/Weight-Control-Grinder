@@ -45,7 +45,12 @@ void operational_task(void *pvParameters)
 
         case OP_GRINDING:
             // Monitor weight
-            current_weight = getFilteredWeight(readLoadCell());
+            current_weight = getFilteredWeight(getLoadCellWeight());
+
+            // Send weight update to UI core
+            status_msg.type = WEIGHT_UPDATE;
+            status_msg.finalWeight = current_weight;
+            sendStatusToCore2(status_msg);
 
             // Handle reaching desired weight
             if (current_weight >= adjusted_target_weight)
@@ -71,7 +76,7 @@ void operational_task(void *pvParameters)
         case OP_POST_GRINDING:
             // Wait for weight to stabilize
             vTaskDelay(1000 / portTICK_PERIOD_MS); // Wait for 1 second
-            final_weight = getFilteredWeight(readLoadCell());
+            final_weight = getFilteredWeight(getLoadCellWeight());
 
             // Update learning parameters
             updateLearningParameters(desired_weight, final_weight, measured_weight_at_stop);

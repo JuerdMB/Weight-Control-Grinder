@@ -46,7 +46,7 @@ void uiTask()
 
                 // Update UI state
                 ui_state = UI_GRINDING_IN_PROGRESS;
-                displayGrindingInProgress();
+                displayGrindingInProgress(0.0f);
 
                 // Turn off encoder so weight cannot be changed during grinding process
                 disableEncoder();
@@ -58,7 +58,12 @@ void uiTask()
             // Check for status updates from Core 1
             if (receiveStatusFromCore1(&status_msg))
             {
-                if (status_msg.type == GRINDING_COMPLETE)
+                if (status_msg.type == WEIGHT_UPDATE)
+                {
+                    // Update current weight display
+                    displayGrindingInProgress(status_msg.finalWeight);
+                }
+                else if (status_msg.type == GRINDING_COMPLETE)
                 {
                     ui_state = UI_GRINDING_COMPLETE;
                     displayGrindingComplete(status_msg.finalWeight);

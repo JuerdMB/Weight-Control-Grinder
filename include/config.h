@@ -14,6 +14,9 @@
 #define DEFAULT_COFFEE_WEIGHT 18.0f
 #define MAX_COFFEE_WEIGHT 24.0f
 
+// Load Cell Parameters
+#define DEFAULT_SCALE_FACTOR 10
+
 // Task Delays
 #define OPERATIONAL_TASK_DELAY 10    // in milliseconds
 #define UI_TASK_DELAY          20    // in milliseconds

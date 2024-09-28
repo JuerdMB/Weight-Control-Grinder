@@ -3,7 +3,7 @@
 #pragma once
 
 enum CommandType{ START_GRINDING, CANCEL_GRINDING };
-enum StatusType  { GRINDING_COMPLETE, ERROR_OCCURRED };
+enum StatusType  { GRINDING_COMPLETE, ERROR_OCCURRED, WEIGHT_UPDATE };
 
 // Enums for UI and Operational States
 enum ui_state       { UI_MAIN, UI_GRINDING_IN_PROGRESS, UI_GRINDING_COMPLETE, UI_ERROR_STATE };
