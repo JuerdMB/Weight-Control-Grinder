@@ -16,7 +16,7 @@ float calculateAdjustedTargetWeight(float desiredWeight) {
     return desiredWeight - overGrindOffset;
 }
 
-void updateLearningParameters(float finalWeight, float measuredWeightAtStop) {
+void updateLearningParameters(float desiredWeight, float finalWeight, float measuredWeightAtStop) {
     float actualOGO = finalWeight - measuredWeightAtStop;
     overGrindOffset = (alpha * actualOGO) + ((1 - alpha) * overGrindOffset);
 

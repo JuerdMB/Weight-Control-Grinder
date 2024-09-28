@@ -16,6 +16,8 @@ float getFilteredWeight(long rawValue) {
     // Convert rawValue to weight in grams (calibration needed)
     float measurement = (float)rawValue; // Replace with actual conversion
 
+    //TODO: Do the conversion from raw loadcell output to weight in grams
+
     // Kalman Filter Calculation
     P = P + Q;
     K = P / (P + R);

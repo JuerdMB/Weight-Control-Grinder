@@ -74,7 +74,7 @@ void operational_task(void *pvParameters)
             final_weight = getFilteredWeight(readLoadCell());
 
             // Update learning parameters
-            updateLearningParameters(final_weight, measured_weight_at_stop);
+            updateLearningParameters(desired_weight, final_weight, measured_weight_at_stop);
 
             // Send status update to Core 2
             status_msg.type = GRINDING_COMPLETE;
