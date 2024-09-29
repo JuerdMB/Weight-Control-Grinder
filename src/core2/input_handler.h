@@ -2,8 +2,6 @@
 
 #include <Arduino.h>
 
-volatile long lastButtonPress = 0;
-
 void initInputHandler();
 bool isButtonPressed();
 int32_t getEncoderPosition();

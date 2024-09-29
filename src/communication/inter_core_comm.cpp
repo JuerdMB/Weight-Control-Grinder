@@ -1,5 +1,3 @@
-#pragma once
-
 #include "inter_core_comm.h"
 #include <Arduino.h>
 #include <freertos/FreeRTOS.h>

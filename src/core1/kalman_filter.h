@@ -1,4 +1,4 @@
 #pragma once
 
 void initKalmanFilter();
-float getFilteredWeight(long rawValue);
+float getFilteredWeight(float rawMeasurement);

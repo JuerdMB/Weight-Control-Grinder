@@ -4,24 +4,28 @@
 #include "communication/inter_core_comm.h"
 #include "display.h"
 
-void uiTask()
+void uiTask(void *pvParameters)
 {
     ui_state ui_state = UI_MAIN;
 
     CommandMessage cmd_msg;
     StatusMessage status_msg;
+    int32_t encoder_pos;
     float desired_weight = DEFAULT_COFFEE_WEIGHT; // Default weight in grams
 
-    // initDisplay();
-    // initInputHandler();
-
+    initDisplay();
+    initInputHandler();
+    
     while (true)
     {
         switch (ui_state)
         {
+
         case UI_MAIN:
+
             // Handle rotary encoder input
-            int32_t encoder_pos = getEncoderPosition();
+            encoder_pos = getEncoderPosition();
+
             if (encoder_pos != 0)
             {
                 desired_weight += encoder_pos * 0.5f; // Adjust step size as needed

@@ -7,7 +7,7 @@
 #include "config.h"
 #include "learning_algorithm.h"
 
-void operational_task(void *pvParameters)
+void operationalTask(void *pvParameters)
 {
     OperationalState op_state = OP_IDLE;
     CommandMessage cmd_msg;

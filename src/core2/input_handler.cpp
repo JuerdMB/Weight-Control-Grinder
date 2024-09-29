@@ -4,7 +4,9 @@
 #include "encoder.h"
 
 Encoder encoder(ENCODER_PIN_A, ENCODER_PIN_B);
+
 volatile bool button_pressed = false;
+volatile long lastButtonPress = 0;
 
 void IRAM_ATTR handleButtonInterrupt() {
     unsigned long now = millis();
