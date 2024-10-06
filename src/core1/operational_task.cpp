@@ -19,8 +19,11 @@ void operationalTask(void *pvParameters)
     float measured_weight_at_stop = 0.0f;
     float final_weight = 0.0f;
 
+    uint32_t grind_start = 0;
+    uint32_t grind_duration = 0;
+
     initMotorControl();
-    initLoadCell();
+    // initLoadCell();
     initKalmanFilter();
     // initLearningAlgorithm();
 
@@ -38,14 +41,20 @@ void operationalTask(void *pvParameters)
                     desired_weight = cmd_msg.desiredWeight;
                     adjusted_target_weight = calculateAdjustedTargetWeight(desired_weight);
                     startMotor();
+                    grind_start = millis();
                     op_state = OP_GRINDING;
                 }
             }
             break;
 
         case OP_GRINDING:
+
+            // Check how long we've been grinding
+            grind_duration = millis() - grind_start;
+
             // Monitor weight
-            current_weight = getFilteredWeight(getLoadCellWeight());
+            // current_weight = getFilteredWeight(getLoadCellWeight());
+            current_weight = (float)grind_duration / 500.f; // Temporary for test
 
             // Send weight update to UI core
             status_msg.type = WEIGHT_UPDATE;
